@@ -1,0 +1,30 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: airlogic
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: jeteveryday
+service: jeteveryday
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  memorySize: 2048
+  stage: prod
+  timeout: 15
+  region: ap-south-1
+  environment:
+    PORT: ${env:port}
+    DB_MONGO: ${env:mongodb}
+
+plugins:
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    path: .env.prod
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http: ANY /{proxy+}
+      - http: ANY /
